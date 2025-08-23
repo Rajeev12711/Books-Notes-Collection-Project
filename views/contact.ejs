@@ -1,0 +1,17 @@
+<%- include('partials/header.ejs'); -%>
+
+    <div class="top_contact">
+    <div class="contact_main">
+        <h1>Contact Me</h1>
+        <form action="/contact" method="POST">
+        <input name="name" type="text" class="feedback-input" placeholder="Name" required />
+        <input name="email" type="email" class="feedback-input" placeholder="Email" required />
+        <input name="phone" type="tel" class="feedback-input" placeholder="Phone Number" />
+        <textarea name="message" class="feedback-input" placeholder="Your Message" required></textarea>
+        <input type="submit" value="SUBMIT" />
+        </form>
+    </div>
+    </div>
+
+
+<%- include('partials/footer.ejs'); -%>

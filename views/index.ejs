@@ -2,21 +2,45 @@
 
     <header>
     <h1>Books I've read</h1>
-    <p>Tiny summary but <strong>detailed notes for each</strong>. Use the ISBN number to find it from your local library or anywhere else. <strong>This page will constantly update as I read more</strong>, so <strong>bookmark the Website</strong> it if you want to check back in a few months.</p>
+    <p>Tiny summary but <strong>detailed notes for each</strong>. Using the ISBN number to find it from local library or anywhere else. <strong>This page will constantly update as I read more </strong>and <strong>if you want to edit your own book in it you can add on this Website</strong>, so <strong>bookmark the Website</strong> it if you want to check back in a few months.</p>
     </header>
-
-    <!-- <p id=sorters>Sorted with <strong>my top recommendations up top</strong>. Sort by
-    <a href="/book?sort=title" id=sort-title>title</a>,
-    <a href="/book?sort=date" id=sort-date>newest</a>, or
-    <a href="/book?sort=rating" id=sort-rating>best</a>.
-    <p>
-        If you have any questions.
-        You can also <a href=/contact>email me</a>.
-    <hr> -->
-
     
-
-
+    <p id=sorters>Sorted with <strong>my top recommendations up top</strong>. Sort by
+        <a href="/?sort=title" id=sort-title>Title</a>,
+        <a href="/?sort=read_at" id=sort-read_at>Newest</a>, or
+        <a href="/?sort=rating" id=sort-rating>Best</a>.
+    </p>
     
+    <p>If you want to <strong>add a new book instead</strong>, click on 
+        <a href="/add">Add Book</a>.
+    </p>
+
+    <p> And if you have any questions regarding <strong>this website, any book, or the book notes,</strong>  
+        you can also <a href="/contact">contact me</a>.
+    </p>
+    
+    <hr>
+
+
+    <% if (listBooks.length === 0) { %>
+        <p>No books added yet. Start by adding your first book!</p>
+    <% } else { %>
+        <div class="book-list">
+            <% listBooks.forEach(book => { %>
+                <div class="book-item">
+                    <figure>
+                        <img src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-M.jpg" 
+                            alt="<%= book.title %>" loading="lazy">
+                    </figure>
+                    <h2><%= book.title %> - by <%= book.author %></h2>
+                    <p><strong>ISBN:</strong> <%= book.isbn %></p>
+                    <p><strong>Rating:</strong> <%= book.rating %>/10</p>
+                    <p><strong>Date Read:</strong> <%= book.read_at.toDateString() %></p>
+                    <p><%= book.summary %></p>
+                </div>
+            <% }) %>
+        </div>
+    <% } %>
+
     
 <%- include('partials/footer.ejs'); -%>
