@@ -1,45 +1,74 @@
 <%- include('partials/header.ejs'); -%>
 
-    <header>
-    <h1>Books I've read</h1>
-    <p>Tiny summary but <strong>detailed notes for each</strong>. Using the ISBN number to find it from local library or anywhere else. <strong>This page will constantly update as I read more </strong>and <strong>if you want to edit your own book in it you can add on this Website</strong>, so <strong>bookmark the Website</strong> it if you want to check back in a few months.</p>
+    <header id="head2">
+        <h2>Books I've read</h2>
+        <p>Tiny summary but <strong>detailed notes for each</strong>. The ISBN number is used to fetch the book's cover from libraries or online sources. This will be <strong>continuously updated</strong>  as I finish new books and refine my notes. Bookmark the site to track <strong>fresh updates</strong> over time.</p>
     </header>
-    
-    <p id=sorters>Sorted with <strong>my top recommendations up top</strong>. Sort by
-        <a href="/?sort=title" id=sort-title>Title</a>,
-        <a href="/?sort=read_at" id=sort-read_at>Newest</a>, or
-        <a href="/?sort=rating" id=sort-rating>Best</a>.
-    </p>
-    
-    <p>If you want to <strong>add a new book instead</strong>, click on 
-        <a href="/add">Add Book</a>.
-    </p>
-
-    <p> And if you have any questions regarding <strong>this website, any book, or the book notes,</strong>  
-        you can also <a href="/contact">contact me</a>.
-    </p>
+        <p id=sorters>Sorted with <strong>my top recommendations up top</strong>. Sort by
+            <a href="/?sort=title" id=sort-title>title</a>,
+            <a href="/?sort=read_at" id=sort-read_at>newest</a>, or
+            <a href="/?sort=rating" id=sort-rating>best</a>.
+        </p>
+        <p>If you want to <strong>add a new book instead</strong>, click on 
+            <a href="/add">add book</a>.
+        </p>
+        <p> And if you have any questions regarding <strong>this website, any book, or about these notes,</strong>  
+            you can also <a href="/contact">contact me</a>.
+        </p>
     
     <hr>
 
 
     <% if (listBooks.length === 0) { %>
-        <p>No books added yet. Start by adding your first book!</p>
+        <section id=allbooks>
+            <div class="booklist">
+                <p>No books added yet. Start by adding your first book!</p>
+            </div>
+        </section>
     <% } else { %>
-        <div class="book-list">
+        <section id=allbooks>
             <% listBooks.forEach(book => { %>
-                <div class="book-item">
+                <div class="abook" data-rating="<%= book.rating %>" data-title="<%= book.title %> - by <%= book.author %>" data-date="<%= book.read_at.toISOString().split('T')[0] %>">
+
                     <figure>
-                        <img src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-M.jpg" 
-                            alt="<%= book.title %>" loading="lazy">
+                        <a href="/books/<%= book.id %>">
+                            <img
+                            src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-M.jpg?default=false"
+                            alt="<%= book.title %> - <%= book.author %>"
+                            loading="lazy"
+                            onerror="this.style.display='none'; 
+                                    this.insertAdjacentHTML('afterend', `
+                                        <div class='book-fallback'>
+                                        <div class='book-title'><%= book.title %></div>
+                                        <div class='book-author'>by- <%= book.author %></div>
+                                        </div>`);"
+                            />
+                        </a>
                     </figure>
-                    <h2><%= book.title %> - by <%= book.author %></h2>
-                    <p><strong>ISBN:</strong> <%= book.isbn %></p>
-                    <p><strong>Rating:</strong> <%= book.rating %>/10</p>
-                    <p><strong>Date Read:</strong> <%= book.read_at.toDateString() %></p>
-                    <p><%= book.summary %></p>
+
+                    <h3>
+                        <a href="/books/<%= book.id %>"><%= book.title %> - by <%= book.author %></a>
+                    </h3>
+                    <small>
+                        Date read: <%= book.read_at.toDateString() %>. 
+                        How strongly I recommend it: <strong><%= book.rating %></strong>/10
+                    </small>
+                    <p class="booksummary"><%= book.summary %></p>
+                    <p>
+                        <strong><a href="/books/<%= book.id %>">Read my notes </a></strong>for details.
+                    </p>
+                    <div class="updatedelete">
+                        <a href="/books/<%= book.id %>/edit">
+                            <button type="button">Edit</button>
+                        </a>
+                        <form action="/books/<%= book.id %>/delete" method="POST" 
+                            onsubmit="return confirm('Are you sure you want to delete this book?');">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </div>
                 </div>
             <% }) %>
-        </div>
+        </section>
     <% } %>
 
     

@@ -1,0 +1,61 @@
+<%- include('partials/header.ejs') %>
+
+
+  <h2>Add Books in Collection</h2>
+
+
+  <div class="form-container">
+      <h3>Fill The Information To List Your Book</h3>
+      <form action="/add" method="POST" onsubmit="return validateSummary()">
+        <div class="input-group">
+            <input name="title" type="text" required />
+            <label>Title</label>
+        </div>
+        <div class="input-group">
+            <input name="author" type="text" required />
+            <label>Author</label>
+        </div>
+        <div class="input-group">
+            <input name="isbn" type="text" required />
+            <label>ISBN</label>
+        </div>
+        <div class="input-group">
+            <input name="rating" type="number" min="1" max="10" />
+            <label>Rating</label>
+        </div>
+        <div class="input-group">
+            <textarea name="summary" id="summary" rows="2" required></textarea>
+            <label>Summary</label>
+        </div>
+        <div class="input-group">
+            <input name="read_at" type="date" />
+            <label>Date Read</label>
+        </div>
+        <button type="submit">SUBMIT</button>
+      </form>
+  </div>
+
+
+  <% if (success) { %>
+    <script>alert("Thanks for adding a book!");</script>
+  <% } %>
+
+  <% if (error) { %>
+    <script>alert("Error adding book. Try again!");</script>
+  <% } %>
+
+  <script>
+    function validateSummary() {
+      const summary = document.getElementById("summary").value.trim();
+      const wordCount = summary.split(/\s+/).filter(word => word.length > 0).length;
+
+      if (wordCount < 30) {
+        alert("Summary must have at least 30 words.");
+        return false;
+      }
+      return true;
+    }
+  </script>
+
+
+<%- include('partials/footer.ejs') %>

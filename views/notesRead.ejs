@@ -1,3 +1,117 @@
 <%- include('partials/header.ejs'); -%>
 
+
+    <div class="abook" data-rating="<%= book.rating %>" data-title="<%= book.title %> - by <%= book.author %>" data-date="<%= book.read_at.toISOString().split('T')[0] %>">
+        <figure>
+            <img src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-M.jpg?default=false"
+                alt="<%= book.title %> - <%= book.author %>"
+                loading="lazy"
+                onerror="this.style.display='none'; 
+                    this.insertAdjacentHTML('afterend', `
+                    <div class='book-fallback'>
+                    <div class='book-title'><%= book.title %></div>
+                    <div class='book-author'>by- <%= book.author %></div>
+                    </div>`);"
+            />
+        </figure>
+        <h2> <%= book.title %> - by <%= book.author %> </h2>
+        <small>
+            ISBN: <%= book.isbn %>
+        </small>
+        <br>
+        <small>
+            Date read: <%= book.read_at.toDateString() %>
+        </small>
+        <br>
+        <small>
+            How strongly I recommend it: <strong><%= book.rating %></strong>/10
+        </small>
+        <br>
+        <br>
+        <small>
+            (If you'd like to <a href="/">read more book </a> notes.)
+        </small>
+        <p><%= book.summary %></p>
+
+
+        <div class="updatedelete">
+            <a href="/books/<%= book.id %>/edit">
+                <button type="button">Edit</button>
+            </a>
+            <form action="/books/<%= book.id %>/delete" method="POST" 
+                onsubmit="return confirm('Are you sure you want to delete this book?');">
+                    <button type="submit">Delete</button>
+            </form>
+        </div>
+        
+
+    </div>
+
+
+
     
+    <div id="notesBox">
+        <h3>My Notes</h3>
+        <% for(let n of note) { %>
+            <div class="item" data-id="<%= n.id %>">
+
+                <form class="delete" id="deleteForm-<%= n.id %>" method="POST" action="/books/<%= book.id %>/notes/delete/<%= n.id %>" style="display:inline;">
+                    <input type="checkbox" onchange="deleteNote('<%= n.id %>')">
+                </form>
+
+                <p id="note-<%= n.id %>"><%= n.note %></p>
+
+                <form class="edit" id="editForm-<%= n.id %>" method="POST" action="/books/<%= book.id %>/notes/edit/<%= n.id %>" style="display:inline;">
+                    <input type="hidden" name="note" id="editNoteInput-<%= n.id %>">
+                    <button type="button" onclick="editNote('<%= n.id %>', '<%= n.note %>')">Edit</button>
+                </form>
+
+            </div>
+        <% } %>
+
+        <form id="addForm" method="POST" action="/books/<%= book.id %>/notes/add">
+            <input type="hidden" name="note" id="addNoteInput">
+            <button type="button" onclick="addNote()">+ Add Note</button>
+        </form>
+    </div>
+
+<script>
+    function addNote() {
+      const note = prompt("Enter new note:");
+      if (!note) return;
+      document.getElementById("addNoteInput").value = note;
+      document.getElementById("addForm").submit();
+    }
+
+    function editNote(id, oldNote) {
+      const newNote = prompt("Edit note:", oldNote);
+      if (!newNote || newNote === oldNote) return;
+      document.getElementById(`editNoteInput-${id}`).value = newNote;
+      document.getElementById(`editForm-${id}`).submit();
+    }
+
+    function deleteNote(id) {
+      if (confirm("Are you sure you want to delete this note?")) {
+        document.getElementById(`deleteForm-${id}`).submit();
+      } else {
+        event.target.checked = false;
+      }
+    }
+
+</script>
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+<%- include('partials/footer.ejs'); -%>

@@ -1,0 +1,38 @@
+<%- include('partials/header.ejs'); -%>
+
+
+
+  <div class="form-container">
+    <h3>Edit Book Information</h3>
+    <form action="/books/<%= book.id %>/edit" method="POST">
+      <div class="input-group">
+        <input name="title" type="text" value="<%= book.title %>" required />
+        <label>Title</label>
+      </div>
+      <div class="input-group">
+        <input name="author" type="text" value="<%= book.author %>" required />
+        <label>Author</label>
+      </div>
+      <div class="input-group">
+        <input name="isbn" type="text" value="<%= book.isbn %>" required />
+        <label>ISBN</label>
+      </div>
+      <div class="input-group">
+        <input name="rating" type="number" min="1" max="10" value="<%= book.rating %>" />
+        <label>Rating</label>
+      </div>
+      <div class="input-group">
+        <textarea name="summary"><%= book.summary %></textarea>
+        <label>Summary</label>
+      </div>
+      <div class="input-group">
+        <input name="read_at" type="date" value="<%= book.read_at.toISOString().split('T')[0] %>" />
+        <label>Date Read</label>
+      </div>
+      <button type="submit">SAVE CHANGES</button>
+    </form>
+  </div>
+
+
+
+<%- include('partials/footer.ejs'); -%>
