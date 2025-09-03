@@ -8,14 +8,20 @@ dotenv.config();
 const app = express();
 const port = 3000;
 
+// for local in device
+// const db = new pg.Client({
+//   user : process.env.USER,
+//   host: process.env.HOST,
+//   database: process.env.DATA,
+//   password: String(process.env.PASSWORD),
+//   port: Number(process.env.PORT)
+// });
+
 
 const db = new pg.Client({
-  user : process.env.USER,
-  host: process.env.HOST,
-  database: process.env.DATA,
-  password: String(process.env.PASSWORD),
-  port: Number(process.env.PORT)
+    connectionString: process.env.DATABASE_URL
 });
+
 db.connect();
 
 
@@ -164,7 +170,7 @@ app.get("/books/:id/edit", async (req, res) => {
     res.render("edit.ejs", { book });
   } catch (err) {
     console.error(err);
-    res.status(500).send("Server error");
+    
   }
 });
 
@@ -228,7 +234,6 @@ app.post("/books/:book_id/notes/delete/:id", async (req, res) => {
     res.redirect(`/books/${book_id}`);
   } catch (err) {
     console.error(err);
-    res.status(500).send("Error deleting note");
   }
 });
 
