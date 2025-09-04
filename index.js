@@ -17,9 +17,11 @@ const port = 3000;
 //   port: Number(process.env.PORT)
 // });
 
-
-const db = new pg.Client({
-    connectionString: process.env.DATABASE_URL
+const db = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
 
 db.connect();
