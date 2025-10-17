@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: books-notes-project
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromSecret: database_url
+    databases:
+      - name: books-notes-db
+        databaseName: books_notes
+        user: books_notes_user
+        plan: starter

@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: books_notes_user
+      POSTGRES_PASSWORD: books_notes_password
+      POSTGRES_DB: books_notes_db
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./db-init.sql:/docker-entrypoint-initdb.d/db-init.sql:ro
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    restart: always
+    environment:
+      DATABASE_URL: postgres://books_notes_user:books_notes_password@db:5432/books_notes_db
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+    command: npm start
+
+volumes:
+  db-data:
